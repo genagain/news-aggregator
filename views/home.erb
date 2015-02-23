@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> </title>
+  </head>
+
+  <body>
+    <h1>News</h1>
+
+
+
+    <ol>
+      <% all_articles.each do |article| %>
+      <li><%=article["title"] +", " + article["url"] + ", " + article["description"]%></li>
+      <% end %>
+    </ol>
+  </br>
+    <div class="error-messages">
+      <% errors.each do |error| %>
+        <p><%= error %></p>
+      <% end %>
+    </div>
+
+    <form action="/" method="post">
+      <input type="text" name="title" value="<%= params[:title] %>" placeholder="Add a Title">
+      <input type="text" name="url" value="<%= params[:url] %>" placeholder="Add a URL">
+      <input type="text" name="description" value="<%= params[:description] %>" placeholder="Add a Description">
+      <input type="submit" value="Submit">
+    </form>
+
+  </body>
+</html>
