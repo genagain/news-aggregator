@@ -19,22 +19,6 @@ def add_article(title, url, description)
   end
 end
 
-def articles_from_csv
-  articles_array = []
-  CSV.foreach('articles.csv', headers: true, headers_converters: :symbol) do |row|
-    articles_array << row.to_hash
-  end
-  articles_array
-end
-
-def csv_to_db(articles)
-  articles.each do |articles_array|
-    db_connection.each do |conn|
-      conn.exec("INSERT INTO articles (title, url, description) VALUES ($1, $2, $3)", [articles[:title], articles[:url], articles[:description]])
-    end
-  end
-end
-
 def get_all_articles
   sql = "SELECT * FROM articles"
   all_articles = db_connection { |conn|conn.exec(sql) }
@@ -67,7 +51,7 @@ end
 
 
 get '/' do
-  errors = !params.empty? ? get_error_messages(params) : ''
+  errors = !params.empty? ? get_error_messages(params) : []
 
   all_articles = get_all_articles
   erb :home, locals: { all_articles: all_articles, errors: errors}
@@ -86,7 +70,3 @@ post '/' do
     redirect "/#{article_to_params(params)}"
   end
 end
-
-
-articles_csv = articles_from_csv
-csv_to_db(articles_csv)
